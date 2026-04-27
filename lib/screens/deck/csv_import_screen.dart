@@ -22,15 +22,15 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
   final CsvImportService _importService = CsvImportService();
 
   final List<String> _categories = [
-    'General',
-    'Math',
-    'Science',
-    'Language',
-    'History',
-    'Programming',
+    'Matematika',
+    'Sains',
+    'Bahasa',
+    'Sejarah',
+    'Pemrograman',
+    'Lainnya',
   ];
 
-  String _category = 'General';
+  String _category = 'Lainnya';
   bool _isPublic = false;
   bool _isImporting = false;
 
@@ -287,7 +287,7 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
                         DropdownMenuItem(value: c, child: Text(c)))
                     .toList(),
                 onChanged: (v) =>
-                    setState(() => _category = v ?? 'General'),
+                    setState(() => _category = v ?? 'Lainnya'),
                 decoration:
                     const InputDecoration(labelText: 'Kategori'),
               ),

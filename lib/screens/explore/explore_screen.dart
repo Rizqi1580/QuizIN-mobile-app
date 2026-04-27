@@ -29,6 +29,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     'Sains',
     'Bahasa',
     'Sejarah',
+    'Pemrograman',
     'Lainnya',
   ];
 

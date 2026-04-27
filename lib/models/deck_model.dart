@@ -30,7 +30,7 @@ class DeckModel {
       id: id,
       title: (map['title'] ?? '') as String,
       description: (map['description'] ?? '') as String,
-      category: (map['category'] ?? 'General') as String,
+      category: (map['category'] ?? 'Lainnya') as String,
       isPublic: (map['isPublic'] ?? false) as bool,
       createdAt: (map['createdAt'] ?? Timestamp.now()) as Timestamp,
       updatedAt: (map['updatedAt'] ?? Timestamp.now()) as Timestamp,

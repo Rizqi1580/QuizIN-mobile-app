@@ -20,16 +20,16 @@ class _DeckFormScreenState extends State<DeckFormScreen> {
   final DeckService _deckService = DeckService();
 
   final List<String> _categories = <String>[
-    'General',
-    'Math',
-    'Science',
-    'Language',
-    'History',
-    'Programming',
+    'Matematika',
+    'Sains',
+    'Bahasa',
+    'Sejarah',
+    'Pemrograman',
+    'Lainnya',
   ];
 
   bool _isLoading = false;
-  String _category = 'General';
+  String _category = 'Lainnya';
   bool _isPublic = false;
 
   bool get _isEdit => widget.deck != null;
@@ -234,7 +234,7 @@ class _DeckFormScreenState extends State<DeckFormScreen> {
                       .toList(),
                   onChanged: (value) {
                     setState(() {
-                      _category = value ?? 'General';
+                      _category = value ?? 'Lainnya';
                     });
                   },
                   decoration: const InputDecoration(labelText: 'Kategori'),
