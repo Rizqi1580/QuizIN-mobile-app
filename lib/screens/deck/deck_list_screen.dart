@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_flashcard/models/deck_model.dart';
 import 'package:quiz_flashcard/screens/deck/deck_detail_screen.dart';
+import 'package:quiz_flashcard/screens/deck/csv_import_screen.dart';
 import 'package:quiz_flashcard/screens/deck/deck_form_screen.dart';
 import 'package:quiz_flashcard/screens/explore/bookmarks_screen.dart';
 import 'package:quiz_flashcard/screens/explore/explore_screen.dart';
 import 'package:quiz_flashcard/screens/quiz/quiz_history_screen.dart';
+import 'package:quiz_flashcard/screens/quiz/quiz_start_screen.dart';
 import 'package:quiz_flashcard/services/deck_service.dart';
 
 class DeckListScreen extends StatefulWidget {
@@ -17,6 +19,46 @@ class DeckListScreen extends StatefulWidget {
 
 class _DeckListScreenState extends State<DeckListScreen> {
   int _currentIndex = 0;
+
+  void _showCreateOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.add_card_outlined),
+              title: const Text('Buat Deck Baru'),
+              subtitle: const Text('Tambah kartu secara manual'),
+              onTap: () {
+                Navigator.pop(ctx);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const DeckFormScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.upload_file_outlined),
+              title: const Text('Import dari CSV'),
+              subtitle: const Text('Buat deck otomatis dari file CSV'),
+              onTap: () {
+                Navigator.pop(ctx);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const CsvImportScreen()),
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +92,7 @@ class _DeckListScreenState extends State<DeckListScreen> {
           NavigationDestination(
             icon: Icon(Icons.explore_outlined),
             selectedIcon: Icon(Icons.explore),
-            label: 'Explore',
+            label: 'Jelajahi',
           ),
           NavigationDestination(
             icon: Icon(Icons.bookmark_outline),
@@ -62,12 +104,7 @@ class _DeckListScreenState extends State<DeckListScreen> {
       // FAB hanya muncul di tab Deck Saya
       floatingActionButton: _currentIndex == 0
           ? FloatingActionButton(
-              onPressed: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const DeckFormScreen()),
-                );
-              },
+              onPressed: () => _showCreateOptions(context),
               child: const Icon(Icons.add),
             )
           : null,
@@ -183,36 +220,8 @@ class _MyDecksTabState extends State<_MyDecksTab> {
                       child: Card(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 8,
-                          ),
-                          title: Text(deck.title),
-                          subtitle:
-                              Text('Jumlah kartu: ${deck.cardCount}'),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Chip(
-                                label: Text(deck.isPublic
-                                    ? 'Public'
-                                    : 'Private'),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          DeckFormScreen(deck: deck),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.edit),
-                              ),
-                            ],
-                          ),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
                           onTap: () async {
                             await Navigator.push(
                               context,
@@ -222,6 +231,83 @@ class _MyDecksTabState extends State<_MyDecksTab> {
                               ),
                             );
                           },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(14, 12, 8, 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        deck.title,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                    Chip(
+                                      label: Text(deck.isPublic
+                                          ? 'Publik'
+                                          : 'Privat'),
+                                      visualDensity: VisualDensity.compact,
+                                    ),
+                                    IconButton(
+                                      onPressed: () async {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                DeckFormScreen(deck: deck),
+                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.edit, size: 20),
+                                      tooltip: 'Edit deck',
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2),
+                                  child: Text(
+                                    '${deck.cardCount} kartu',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Tooltip(
+                                    message: deck.cardCount < 1
+                                        ? 'Tambahkan minimal 1 kartu'
+                                        : '',
+                                    child: FilledButton.icon(
+                                      onPressed: deck.cardCount >= 1
+                                          ? () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      QuizStartScreen(
+                                                          deck: deck),
+                                                ),
+                                              )
+                                          : null,
+                                      icon: const Icon(Icons.play_arrow,
+                                          size: 16),
+                                      label: const Text('Mulai'),
+                                      style: FilledButton.styleFrom(
+                                        visualDensity: VisualDensity.compact,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     );

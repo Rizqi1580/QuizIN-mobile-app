@@ -229,7 +229,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Tap "Reveal Answer" untuk membalik kartu',
+                    'Tap "Buka Jawaban" untuk membalik kartu',
                     style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                   ),
                 ],
@@ -430,20 +430,24 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withValues(alpha: 0.08),
+                color: _pointsColor(_currentCardPoints).withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: _pointsColor(_currentCardPoints).withValues(alpha: 0.25),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.payments_outlined, size: 16),
+                  Icon(Icons.payments_outlined, size: 16,
+                      color: _pointsColor(_currentCardPoints)),
                   const SizedBox(width: 8),
                   Text(
                     'Poin saat ini: $_currentCardPoints/${QuizHelper.maxPointsPerCard}',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 13),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                      color: _pointsColor(_currentCardPoints),
+                    ),
                   ),
                 ],
               ),
@@ -506,6 +510,18 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         ),
       ),
     );
+  }
+
+  String _formatTime(int totalSeconds) {
+    final int mins = totalSeconds ~/ 60;
+    final int secs = totalSeconds % 60;
+    return '${mins.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+  }
+
+  Color _pointsColor(int points) {
+    if (points >= 70) return Colors.green;
+    if (points >= 40) return Colors.orange;
+    return Colors.red;
   }
 
   // ── Stat chip ─────────────────────────────────────────────────────────────
@@ -596,7 +612,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   context,
                   icon: Icons.timer_outlined,
                   label: 'Waktu',
-                  value: '${_stopwatch.elapsed.inSeconds}s',
+                  value: _formatTime(_stopwatch.elapsed.inSeconds),
                   color: Colors.blue,
                 ),
                 const SizedBox(width: 8),
@@ -605,7 +621,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
                   icon: Icons.grade_outlined,
                   label: 'Poin',
                   value: '${_earnedPointsSoFar + _currentCardPoints}',
-                  color: Colors.green,
+                  color: _pointsColor(_currentCardPoints),
                 ),
               ],
             ),
@@ -642,12 +658,17 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         FilledButton.icon(
           onPressed: _toggleAnswerReveal,
           icon: const Icon(Icons.flip),
-          label: const Text('Reveal Answer'),
+          label: const Text('Buka Jawaban'),
         ),
         const SizedBox(height: 8),
         TextButton(
           onPressed: () => _finishCurrentCard(skipped: true),
           child: const Text('Lewati Kartu'),
+        ),
+        Text(
+          'Melewati kartu tidak mendapat poin',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 11, color: Colors.grey[500]),
         ),
       ],
     );
@@ -663,16 +684,23 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.green.withValues(alpha: 0.08),
+            color: _pointsColor(_currentCardPoints).withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: _pointsColor(_currentCardPoints).withValues(alpha: 0.25),
+            ),
           ),
           child: Row(
             children: [
-              const Icon(Icons.stars_outlined, size: 18, color: Colors.green),
+              Icon(Icons.stars_outlined, size: 18,
+                  color: _pointsColor(_currentCardPoints)),
               const SizedBox(width: 8),
               Text(
                 'Poin kartu ini: $_currentCardPoints/${QuizHelper.maxPointsPerCard}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: _pointsColor(_currentCardPoints),
+                ),
               ),
             ],
           ),

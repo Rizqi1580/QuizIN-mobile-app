@@ -29,8 +29,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
   final _questionController = TextEditingController();
   final _answerController = TextEditingController();
   final _explanationController = TextEditingController();
-  final List<TextEditingController> _clueControllers =
-      List<TextEditingController>.generate(4, (_) => TextEditingController());
+  final List<TextEditingController> _clueControllers = [];
 
   final CardService _cardService = CardService();
   final StorageService _storageService = StorageService();
@@ -52,11 +51,17 @@ class _CardFormScreenState extends State<CardFormScreen> {
       final card = widget.card!;
       _questionController.text = card.question;
       _answerController.text = card.answerText;
-      for (int i = 0; i < 4; i++) {
-        _clueControllers[i].text = i < card.clues.length ? card.clues[i] : '';
+      final existingClues = card.clues;
+      final initialCount = existingClues.isEmpty ? 1 : existingClues.length;
+      for (int i = 0; i < initialCount; i++) {
+        _clueControllers.add(TextEditingController(
+          text: i < existingClues.length ? existingClues[i] : '',
+        ));
       }
       _existingImagePath = card.imageUrl;
       _explanationController.text = card.explanation;
+    } else {
+      _clueControllers.add(TextEditingController());
     }
   }
 
@@ -334,7 +339,7 @@ class _CardFormScreenState extends State<CardFormScreen> {
                 // Clue
                 const Text('Clue (maksimal 4, opsional):'),
                 const SizedBox(height: 8),
-                for (int i = 0; i < 4; i++) ...[
+                for (int i = 0; i < _clueControllers.length; i++) ...[
                   TextFormField(
                     controller: _clueControllers[i],
                     decoration: InputDecoration(
@@ -343,6 +348,16 @@ class _CardFormScreenState extends State<CardFormScreen> {
                   ),
                   const SizedBox(height: 10),
                 ],
+                if (_clueControllers.length < 4)
+                  TextButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        _clueControllers.add(TextEditingController());
+                      });
+                    },
+                    icon: const Icon(Icons.add, size: 18),
+                    label: const Text('Tambah Clue'),
+                  ),
 
                 const Divider(),
                 const SizedBox(height: 8),

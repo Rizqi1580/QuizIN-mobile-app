@@ -89,15 +89,35 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                         ),
                   ),
                   const SizedBox(height: 14),
+                  Icon(
+                    score >= 80
+                        ? Icons.emoji_events
+                        : score >= 50
+                            ? Icons.thumb_up_outlined
+                            : Icons.refresh,
+                    size: 48,
+                    color: score >= 80
+                        ? Colors.amber
+                        : score >= 50
+                            ? Colors.blue
+                            : Colors.red,
+                  ),
+                  const SizedBox(height: 8),
                   TweenAnimationBuilder<double>(
                     tween: Tween<double>(begin: 0, end: score),
                     duration: const Duration(milliseconds: 900),
                     builder: (BuildContext _, double value, Widget? child) {
+                      final Color scoreColor = score >= 80
+                          ? Colors.green
+                          : score >= 50
+                              ? Colors.orange
+                              : Colors.red;
                       return Text(
                         '${value.toStringAsFixed(1)}%',
                         style:
                             Theme.of(context).textTheme.displaySmall?.copyWith(
                                   fontWeight: FontWeight.w700,
+                                  color: scoreColor,
                                 ),
                       );
                     },
@@ -150,7 +170,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                   ),
                 );
               },
-              child: const Text('Review Jawaban'),
+              child: const Text('Periksa Jawaban'),
             ),
           ),
           const SizedBox(height: 8),
@@ -160,7 +180,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Coba Lagi'),
+              child: const Text('Mulai Ulang'),
             ),
           ),
           const SizedBox(height: 8),

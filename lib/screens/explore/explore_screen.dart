@@ -29,7 +29,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     'Sains',
     'Bahasa',
     'Sejarah',
-    'Testing',
     'Lainnya',
   ];
 
@@ -99,7 +98,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Explore'),
+        title: const Text('Jelajahi'),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: Padding(

@@ -118,8 +118,8 @@ class _QuizStartScreenState extends State<QuizStartScreen> {
                             const Spacer(),
                             Chip(
                               label: Text(widget.deck.isPublic
-                                  ? 'Public'
-                                  : 'Private'),
+                                  ? 'Publik'
+                                  : 'Privat'),
                               visualDensity: VisualDensity.compact,
                             ),
                           ],

@@ -20,12 +20,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
       await _bookmarkService.removeBookmark(userId, deckId);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bookmark dihapus')),
+        const SnackBar(content: Text('Deck dihapus dari tersimpan')),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus bookmark: $e')),
+        SnackBar(content: Text('Gagal menghapus dari tersimpan: $e')),
       );
     }
   }
@@ -76,7 +76,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                           builder: (_) => const ExploreScreen()),
                     ),
                     icon: const Icon(Icons.explore),
-                    label: const Text('Explore Deck'),
+                    label: const Text('Jelajahi Deck'),
                   ),
                 ],
               ),
@@ -114,7 +114,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   return await showDialog<bool>(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text('Hapus Bookmark'),
+                      title: const Text('Hapus dari Tersimpan'),
                       content: Text(
                           'Hapus "${deck.title}" dari tersimpan?'),
                       actions: [

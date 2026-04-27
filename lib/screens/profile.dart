@@ -21,7 +21,7 @@ class ProfileScreen extends StatelessWidget {
           final user = snapshot.data!;
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Account Information'),
+              title: const Text('Informasi Akun'),
               centerTitle: true,
             ),
             body: Column(
@@ -53,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.notifications_outlined),
                   title: const Text('Pengingat Belajar'),
-                  subtitle: const Text('Atur jadwal reminder harian'),
+                  subtitle: const Text('Atur jadwal pengingat harian'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
                     context,
@@ -74,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: () => logout(context),
                       icon: const Icon(Icons.logout),
-                      label: const Text('Logout'),
+                      label: const Text('Keluar'),
                     ),
                   ),
                 ),

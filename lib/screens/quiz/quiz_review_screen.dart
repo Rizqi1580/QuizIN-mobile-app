@@ -12,7 +12,7 @@ class QuizReviewScreen extends StatelessWidget {
     final double score = session.scorePercent;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Review Jawaban')),
+      appBar: AppBar(title: const Text('Periksa Jawaban')),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: session.answers.length + 1,

@@ -81,7 +81,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
                         children: [
                           Chip(label: Text(widget.deck.category)),
                           const SizedBox(width: 8),
-                          Chip(label: Text(widget.deck.isPublic ? 'Public' : 'Private')),
+                          Chip(label: Text(widget.deck.isPublic ? 'Publik' : 'Privat')),
                         ],
                       ),
                     ],
@@ -121,6 +121,32 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: const Icon(Icons.delete, color: Colors.white),
                           ),
+                          confirmDismiss: (_) async {
+                            return await showDialog<bool>(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: const Text('Hapus kartu?'),
+                                content: Text(
+                                  '"${card.question}" akan dihapus permanen.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(ctx, false),
+                                    child: const Text('Batal'),
+                                  ),
+                                  FilledButton(
+                                    onPressed: () =>
+                                        Navigator.pop(ctx, true),
+                                    style: FilledButton.styleFrom(
+                                        backgroundColor: Colors.red),
+                                    child: const Text('Hapus'),
+                                  ),
+                                ],
+                              ),
+                            ) ??
+                                false;
+                          },
                           onDismissed: (_) {
                             _deleteCard(user.uid, widget.deck.id, card.id);
                           },
