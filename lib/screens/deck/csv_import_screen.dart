@@ -53,23 +53,34 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
 
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['csv'],
+      type: FileType.any,
+      withData: true,
     );
     if (result == null) return;
+
+    final file = result.files.first;
+    final name = file.name.toLowerCase();
+    if (!name.endsWith('.csv')) {
+      setState(() {
+        _parsedCards = null;
+        _parseError = 'File harus berekstensi .csv';
+        _csvFileName = file.name;
+      });
+      return;
+    }
 
     setState(() {
       _parsedCards = null;
       _parseError = null;
-      _csvFileName = result.files.first.name;
+      _csvFileName = file.name;
     });
 
     try {
       String content;
-      if (result.files.first.bytes != null) {
-        content = String.fromCharCodes(result.files.first.bytes!);
-      } else if (result.files.first.path != null) {
-        content = await File(result.files.first.path!).readAsString();
+      if (file.bytes != null) {
+        content = String.fromCharCodes(file.bytes!);
+      } else if (file.path != null) {
+        content = await File(file.path!).readAsString();
       } else {
         throw Exception('Tidak dapat membaca file');
       }
@@ -312,7 +323,7 @@ class _CsvImportScreenState extends State<CsvImportScreen> {
             OutlinedButton.icon(
               onPressed: _pickFile,
               icon: const Icon(Icons.upload_file),
-              label: const Text('Pilih File CSV'),
+              label: const Text('Pilih File (.csv)'),
             ),
             if (_csvFileName != null) ...[
               const SizedBox(height: 8),
