@@ -78,7 +78,7 @@ Aplikasi belajar interaktif berbasis flashcard dan kuis, dibangun dengan Flutter
 
 ```bash
 # 1. Clone repositori
-git clone https://github.com/<username>/quiz_flashcard.git
+https://github.com/Rizqi1580/QuizIN-mobile-app.git
 cd quiz_flashcard
 
 # 2. Pasang dependensi
