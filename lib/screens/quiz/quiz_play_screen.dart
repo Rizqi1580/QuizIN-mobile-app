@@ -131,9 +131,9 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
     }
   }
 
-  void _finishCurrentCard() {
+  void _finishCurrentCard({bool skipped = false}) {
     final CardModel card = _currentCard;
-    final int earnedPoints = _currentCardPoints;
+    final int earnedPoints = skipped ? 0 : _currentCardPoints;
     final List<String> revealedClues = _revealedClueIndexes
         .map((int index) => card.clues[index])
         .toList();
@@ -646,7 +646,7 @@ class _QuizPlayScreenState extends State<QuizPlayScreen>
         ),
         const SizedBox(height: 8),
         TextButton(
-          onPressed: _finishCurrentCard,
+          onPressed: () => _finishCurrentCard(skipped: true),
           child: const Text('Lewati Kartu'),
         ),
       ],
